@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -8,6 +8,8 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import { fetchSeasonData } from '../../api'
+
 
 const useStyles = makeStyles({
   root: {
@@ -16,11 +18,25 @@ const useStyles = makeStyles({
 });
 
 export default function ImgMediaCard({handleShowContent}) {
+
+  const [ seasonData, setSeasonData ] = useState([]);
+
+  useEffect( () => {
+    const fetchAPI = async () => {
+      const fetchedSeasonData = setSeasonData( await fetchSeasonData());
+      
+    }
+
+    fetchAPI();
+  }, []);
+
+  console.log(seasonData);
+  
   const classes = useStyles();
 
   const handleChange = () => {
       console.log(useStyles)
-  }
+  };
 
   return (
     <Card className={classes.root} onClick={() => handleShowContent()}>
