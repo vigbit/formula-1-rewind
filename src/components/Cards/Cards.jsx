@@ -59,7 +59,6 @@ export default function ImgMediaCard({handleShowContent, year}) {
   const classes = useStyles();
   const theme = useTheme();
 
-  // const matches = useMediaQuery(theme.breakpoints.up("sm"));
   return (
     seasonData
     ?
@@ -68,7 +67,7 @@ export default function ImgMediaCard({handleShowContent, year}) {
       
       { seasonData.map( (data, index) =>(
           <Grid item xs={12} sm={6} md={3}>
-          <Card className={classes.root} onClick={() => handleShowContent()} key={index}>
+          <Card className={classes.root} onClick={() => handleShowContent(data.round, data.season)} key={index}>
             <div className={classes.details}>
             
               <CardMedia

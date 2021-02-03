@@ -55,3 +55,28 @@ export const fetchSeasonData = async (year) => {
         console.log(error)
     }
 }
+
+export const fetchRaceData = async () => {
+    try {
+        const {data: { MRData: {RaceTable: {Races}}}} = await axios.get(`${url}/2020/4/qualifying.json`);
+
+        const modifiedData = Races[0].QualifyingResults.map((raceData) => ({
+
+            familyName: raceData.Driver.familyName,
+            givenName: raceData.Driver.givenName,
+            nationality: raceData.Driver.nationality,
+            permanentNumber: raceData.Driver.permanentNumber,
+            code: raceData.Driver.code,
+            Q1: raceData.Q1,
+            Q2: raceData.Q2,
+            Q3: raceData.Q3,
+            position: raceData.position,
+        }))
+
+        return modifiedData;
+        
+    } catch (error) {
+        console.log(error);
+        
+    }
+}

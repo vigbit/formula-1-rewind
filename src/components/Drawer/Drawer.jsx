@@ -20,6 +20,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import Cards from '../Cards/Cards';
 import Content from '../Content/Content';
+import ContentTabs from '../ContentTabs/ContentTabs'
 
 import { fetchSeasons } from '../../api'
 
@@ -71,6 +72,9 @@ function ResponsiveDrawer(props) {
   const [showContent, setShowContent] = useState(false);
   const [seasonsData, setSeasonsData] = useState([]);
   const [year, setYear] = useState();
+  const [raceRound, setRaceRound] = useState();
+  const [raceYear, setRaceYear] = useState();
+  
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -84,8 +88,10 @@ function ResponsiveDrawer(props) {
     setMobileOpen(!mobileOpen);
   };
 
-  const handleShowContent = () => {
+  const handleShowContent = (round, year) => {
     setShowContent(!showContent);
+    setRaceRound(round);
+    setRaceYear(year);
   }
 
   const drawer = (
@@ -159,7 +165,7 @@ function ResponsiveDrawer(props) {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <div>
-          {showContent && <Content/>}
+          {showContent && <ContentTabs raceRound={raceRound} raceYear={raceYear}/>}
         </div>
         <Cards handleShowContent={handleShowContent} year={year}/>
       </main>
