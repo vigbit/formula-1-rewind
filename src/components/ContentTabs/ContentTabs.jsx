@@ -7,7 +7,9 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-import { fetchRaceData } from '../../api'
+import { fetchQualifyingData } from '../../api';
+import { fetchResultsData } from '../../api';
+import { fetchConstructorsData } from '../../api';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -75,24 +77,46 @@ const useStyles = makeStyles((theme) => ({
 export default function NavTabs({raceRound, raceYear}) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-  const [raceData, setRaceData] = useState([]);
+  const [qualiData, setQualiData] = useState([]);
+  const [resultsData, setResultsData] = useState([]);
+  const [constructorsData, setConstructorsData] = useState([]);
+  
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
 console.log(raceRound, raceYear)
+console.log(value)
 
   useEffect(() => {
     const fetchAPI = async () => {
-      setRaceData(await fetchRaceData())
+      setQualiData(await fetchQualifyingData(raceRound, raceYear))
     }
     fetchAPI();
   },[]); 
 
-  console.log(raceData)
+  useEffect(() => {
+    const fetchAPI = async () => {
+      setResultsData( await fetchResultsData(raceRound, raceYear))
+    }
+    fetchAPI();
+  }, []);
 
-  const qualifying = (
-    <TableContainer component={Paper}>
+  console.log(resultsData)
+
+  useEffect(() => {
+    const fetchAPI = async () => {
+      setConstructorsData( await fetchConstructorsData(raceRound, raceYear))
+    }
+    fetchAPI();
+  }, []);
+
+  console.log(constructorsData)
+
+  const qualifyingTab = (
+    qualiData
+    ?
+    (<TableContainer component={Paper}>
     <Table className={classes.table} aria-label="simple table">
       <TableHead>
         <TableRow>
@@ -103,7 +127,7 @@ console.log(raceRound, raceYear)
         </TableRow>
       </TableHead>
       <TableBody>
-        {raceData.map((data, index) => (
+        {qualiData.map((data, index) => (
           <TableRow key={index}>
             <TableCell component="th" scope="row">
               {data.givenName} {data.familyName}
@@ -115,7 +139,77 @@ console.log(raceRound, raceYear)
         ))}
       </TableBody>
     </Table>
-  </TableContainer>
+  </TableContainer>) : <div>Sorry, information unavailable at this time</div>
+
+  );
+
+  const resultsTab = (
+    resultsData
+    ?
+    (<TableContainer component={Paper}>
+    <Table className={classes.table} aria-label="simple table">
+      <TableHead>
+        <TableRow>
+          <TableCell>Driver</TableCell>
+          <TableCell align="right">Grid</TableCell>
+          <TableCell align="right">Laps</TableCell>
+          <TableCell align="right">Fastest Lap</TableCell>
+          <TableCell align="right">Position</TableCell>
+          <TableCell align="right">Points</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {resultsData.map((data, index) => (
+          <TableRow key={index}>
+            <TableCell component="th" scope="row">
+              {data.givenName} {data.familyName}
+            </TableCell>
+            <TableCell align="right">{data.grid}</TableCell>
+            <TableCell align="right">{data.laps}</TableCell>
+            <TableCell align="right">{data.fastestLap}</TableCell>
+            <TableCell align="right">{data.position}</TableCell>
+            <TableCell align="right">{data.points}</TableCell>
+
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer> ) : <div>Sorry, information unavailable at this time</div>
+
+  );
+
+  const constructorsTab = (
+    constructorsData
+    ?
+    (
+    <TableContainer component={Paper}>
+      <Table className={classes.table} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Team</TableCell>
+            <TableCell align="right">Wins</TableCell>
+            <TableCell align="right">Points</TableCell>
+            <TableCell align="right">Position</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {constructorsData.map((data, index) => (
+            <TableRow key={index}>
+              <TableCell component="th" scope="row">
+                {data.name} 
+              </TableCell>
+              <TableCell align="right">{data.wins}</TableCell>
+              <TableCell align="right">{data.points}</TableCell>
+              <TableCell align="right">{data.position}</TableCell>  
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer> 
+
+
+    ) : <div>Sorry, information unavailable at this time</div>
+
 
   );
 
@@ -134,13 +228,13 @@ console.log(raceRound, raceYear)
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        {qualifying}
+        {qualifyingTab}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Page Two
+        {resultsTab}
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Page Three
+        {constructorsTab}
       </TabPanel>
     </div>
   );

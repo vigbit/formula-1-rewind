@@ -56,10 +56,11 @@ export const fetchSeasonData = async (year) => {
     }
 }
 
-export const fetchRaceData = async () => {
+export const fetchQualifyingData = async (raceRound, raceYear) => {
+    
     try {
-        const {data: { MRData: {RaceTable: {Races}}}} = await axios.get(`${url}/2020/4/qualifying.json`);
-
+        const {data: { MRData: {RaceTable: {Races}}}} = await axios.get(`${url}/${raceYear}/${raceRound}/qualifying.json`);
+        
         const modifiedData = Races[0].QualifyingResults.map((raceData) => ({
 
             familyName: raceData.Driver.familyName,
@@ -77,6 +78,54 @@ export const fetchRaceData = async () => {
         
     } catch (error) {
         console.log(error);
+        
+    }
+}
+
+export const fetchResultsData = async (raceRound, raceYear) => {
+    try {
+        const {data: { MRData: {RaceTable: {Races}}}} = await axios.get(`${url}/${raceYear}/${raceRound}/results.json`);
+        
+        const modifiedData = Races[0].Results.map((raceData) => ({
+
+            familyName: raceData.Driver.familyName,
+            givenName: raceData.Driver.givenName,
+            nationality: raceData.Driver.nationality,
+            permanentNumber: raceData.Driver.permanentNumber,
+            code: raceData.Driver.code,
+            fastestLap: raceData.FastestLap.Time.time,
+            position: raceData.position,
+            grid: raceData.grid,
+            points: raceData.points,
+            laps: raceData.laps,
+            status: raceData.status,
+            time: raceData.Time,
+            
+        }))
+
+        return modifiedData;
+        
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+
+export const fetchConstructorsData = async (raceRound, raceYear) => {
+    try {
+        const {data: {MRData: { StandingsTable: { StandingsLists} }}} = await axios.get(`${url}/${raceYear}/${raceRound}/constructorStandings.json`);
+
+        const modifiedData = StandingsLists[0].ConstructorStandings.map( (data) => ({
+            name: data.Constructor.name,
+            points: data.points,
+            position: data.position,
+            wins: data.wins,
+        }))
+
+        return modifiedData;
+        
+    } catch (error) {
+        console.log(error)
         
     }
 }

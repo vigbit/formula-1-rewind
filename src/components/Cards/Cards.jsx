@@ -66,8 +66,8 @@ export default function ImgMediaCard({handleShowContent, year}) {
       <Grid container> 
       
       { seasonData.map( (data, index) =>(
-          <Grid item xs={12} sm={6} md={3}>
-          <Card className={classes.root} onClick={() => handleShowContent(data.round, data.season)} key={index}>
+          <Grid item xs={12} sm={6} md={3} key={index}>
+          <Card className={classes.root} onClick={() => handleShowContent(data.round, data.season)} >
             <div className={classes.details}>
             
               <CardMedia
