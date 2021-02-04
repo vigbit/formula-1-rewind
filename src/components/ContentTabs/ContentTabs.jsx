@@ -93,14 +93,14 @@ console.log(value)
       setQualiData(await fetchQualifyingData(raceRound, raceYear))
     }
     fetchAPI();
-  },[]); 
+  },[raceRound]); 
 
   useEffect(() => {
     const fetchAPI = async () => {
       setResultsData( await fetchResultsData(raceRound, raceYear))
     }
     fetchAPI();
-  }, []);
+  }, [raceRound]);
 
   console.log(resultsData)
 

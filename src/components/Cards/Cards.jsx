@@ -7,6 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Collapse from '@material-ui/core/Collapse'
 
 import { fetchSeasonData } from '../../api'
 
@@ -17,16 +18,18 @@ import sampleImage from '../../images/sample.png'
 import { useTheme } from "@material-ui/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
+import ContentTabs from '../ContentTabs/ContentTabs'
+
 
 const useStyles = makeStyles(theme => ({
   root: {
+    position: 'relative',
+    width: '100%',
     display: 'flex',
-    alignItems: 'center',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
     margin: '10px',
-    maxWidth: 345,
-    [theme.breakpoints.down("md")] : {
-    maxWidth: 300
-    },
+    height: '100%',
     
   },
   details: {
@@ -44,6 +47,10 @@ const useStyles = makeStyles(theme => ({
 export default function ImgMediaCard({handleShowContent, year}) {
 
   const [ seasonData, setSeasonData ] = useState([]);
+  const [ expanded, setExpanded ] = useState(false);
+  const [raceRound, setRaceRound] = useState();
+  const [raceYear, setRaceYear] = useState();
+  const [selectedIndex, setSelectedIndex] = useState("");
 
   useEffect( () => {
     const fetchAPI = async () => {
@@ -56,19 +63,31 @@ export default function ImgMediaCard({handleShowContent, year}) {
 
   console.log(seasonData);
 
+  const handleExpandClick = (round, year, index) => {
+      if(selectedIndex != index){
+        setSelectedIndex(index);
+      }else{
+        setSelectedIndex(selectedIndex);
+      }
+      setExpanded(!expanded);
+      setRaceRound(round);
+      setRaceYear(year);
+  }
+
   const classes = useStyles();
   const theme = useTheme();
 
   return (
     seasonData
     ?
-    (<div>
-      <Grid container> 
+    (<div className={classes.root}>
+      <Grid container > 
       
       { seasonData.map( (data, index) =>(
-          <Grid item xs={12} sm={6} md={3} key={index}>
-          <Card className={classes.root} onClick={() => handleShowContent(data.round, data.season)} >
-            <div className={classes.details}>
+          <Grid item xs={12} key={index}>
+          <Card>
+          {/* handleShowContent(data.round, data.season) */}
+            <div >
             
               <CardMedia
                 className={classes.cover}
@@ -77,7 +96,7 @@ export default function ImgMediaCard({handleShowContent, year}) {
                 src={sampleImage}
                 title="none"
               />
-              <CardContent className={classes.content}>
+              <CardContent className={classes.content} onClick={() =>  handleExpandClick(data.round, data.season, index) }>
               <Typography variant="body2" color="textSecondary" component="p">
                   Round {data.round}
                 </Typography>
@@ -89,8 +108,10 @@ export default function ImgMediaCard({handleShowContent, year}) {
                 </Typography>
               </CardContent>
             </div>
+            <Collapse in={expanded && selectedIndex == index} timeout="auto" unmountOnExit>
+              {<ContentTabs raceRound={raceRound} raceYear={raceYear}/> }
+            </Collapse>
           </Card>
-         
          </Grid>
         
       ))}

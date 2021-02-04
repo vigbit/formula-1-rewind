@@ -19,8 +19,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import Cards from '../Cards/Cards';
-import Content from '../Content/Content';
-import ContentTabs from '../ContentTabs/ContentTabs'
+// import Content from '../Content/Content';
+// import ContentTabs from '../ContentTabs/ContentTabs'
 
 import { fetchSeasons } from '../../api'
 
@@ -69,11 +69,11 @@ function ResponsiveDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [showContent, setShowContent] = useState(false);
+  // const [showContent, setShowContent] = useState(false);
   const [seasonsData, setSeasonsData] = useState([]);
   const [year, setYear] = useState();
-  const [raceRound, setRaceRound] = useState();
-  const [raceYear, setRaceYear] = useState();
+  // const [raceRound, setRaceRound] = useState();
+  // const [raceYear, setRaceYear] = useState();
   
 
   useEffect(() => {
@@ -88,11 +88,18 @@ function ResponsiveDrawer(props) {
     setMobileOpen(!mobileOpen);
   };
 
-  const handleShowContent = (round, year) => {
-    setShowContent(!showContent);
-    setRaceRound(round);
-    setRaceYear(year);
-  }
+  // const handleShowContent = (round, year) => {
+  //   if(raceRound != null && raceRound != round){
+  //     setShowContent(showContent);
+  //     setRaceRound(round);
+  //     setRaceYear(year);
+  //   }else{
+  //     setShowContent(!showContent);
+  //     setRaceRound(round);
+  //     setRaceYear(year);
+  //   }
+
+  // }
 
   const drawer = (
     <div>
@@ -164,15 +171,16 @@ function ResponsiveDrawer(props) {
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <div>
+        {/* <div>
           {showContent && <ContentTabs raceRound={raceRound} raceYear={raceYear}/>}
-        </div>
-        <Cards handleShowContent={handleShowContent} year={year}/>
+        </div> */}
+        <Cards  year={year}/>
       </main>
     </div>
   );
 }
 
+{/* handleShowContent={handleShowContent} */}
 ResponsiveDrawer.propTypes = {
   /**
    * Injected by the documentation to work in an iframe.

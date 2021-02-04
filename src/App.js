@@ -1,4 +1,6 @@
 import React from 'react';
+import { ThemeProvider } from '@material-ui/core';
+import theme from './theme'
 
 import Drawer from './components/Drawer/Drawer';
 
@@ -12,9 +14,9 @@ class App extends React.Component{
 
     render(){
         return(
-            <div>
+            <ThemeProvider theme={theme}>
                 <Drawer />
-            </div>
+            </ThemeProvider>
         )
     }
 }
